@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - wall
+  - paddle
+  - top
+  - bottom
+  - topCol
   layers:
   - Default
   - TransparentFX
@@ -14,9 +19,9 @@ TagManager:
   - 
   - 
   - 
+  - Background
   - 
-  - 
-  - 
+  - Buttons
   - 
   - 
   - 
@@ -46,4 +51,7 @@ TagManager:
     locked: 0
   - name: PlayItems
     uniqueID: 3015057025
+    locked: 0
+  - name: Buttons
+    uniqueID: 1682652123
     locked: 0
