@@ -9,6 +9,7 @@ TagManager:
   - top
   - bottom
   - topCol
+  - bottomCol
   layers:
   - Default
   - TransparentFX

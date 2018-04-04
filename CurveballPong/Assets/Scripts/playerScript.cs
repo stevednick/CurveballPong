@@ -13,6 +13,8 @@ public class playerScript : MonoBehaviour {
 	public Vector2 velocity;
 	public GameObject ball;
 	public float computerSensivity;
+	public bool twoPlayer = false;
+
 
 	void Start()
 	{
@@ -23,7 +25,8 @@ public class playerScript : MonoBehaviour {
 
 	void Update ()
 	{
-		if (gameObject.tag == "top") {
+		
+		if (gameObject.tag == "top" && !dataController.DC.twoPlayer) {
 
 			if (ball.GetComponent<Rigidbody2D> ().velocity.y > 0f) {
 				if (transform.localPosition.x > ball.transform.localPosition.x - computerSensivity) {
@@ -43,6 +46,8 @@ public class playerScript : MonoBehaviour {
 				rightPressed = false;
 			}
 		}
+
+		control ();
 
 		if(leftPressed)
 		{
@@ -65,10 +70,33 @@ public class playerScript : MonoBehaviour {
 	}
 
 	void OnTriggerStay2D(Collider2D c){
-		if (transform.position.x < 0) {
-			leftPressed = false;
-		} else if (transform.position.x > 0) {
-			rightPressed = false;
+
+		if (c.gameObject.tag == "wall") {
+			if (transform.position.x < 0) {
+				leftPressed = false;
+			} else if (transform.position.x > 0) {
+				rightPressed = false;
+			}
 		}
 	}
+
+	void control(){
+		
+		if(Input.GetButtonDown("Horizontal")){
+			leftPressed = true;
+		}
+		if (Input.GetButtonUp ("Horizontal")) {
+			leftPressed = false;
+		}
+		if(Input.GetButtonDown("Vertical")){
+			rightPressed = true;
+		}
+		if (Input.GetButtonUp ("Vertical")) {
+			rightPressed = false;
+		}
+		if (Input.GetButtonDown ("Fire1")) {
+			ball.GetComponent<ballScript> ().smash (false);
+		}
+	}
+		
 }

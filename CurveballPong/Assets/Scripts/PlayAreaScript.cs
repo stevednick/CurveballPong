@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class scoring : MonoBehaviour {
+public class PlayAreaScript : MonoBehaviour {
 
 	List<string> numbers = new List<string> ();
 	public Text top;
@@ -15,22 +15,15 @@ public class scoring : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		numbers.Add ("zero");
-		numbers.Add ("one");
-		numbers.Add ("two");
-		numbers.Add ("three");
-		numbers.Add ("four");
-		numbers.Add ("five");
-		numbers.Add ("six");
-		numbers.Add ("seven");
-		numbers.Add ("eight");
-		numbers.Add ("nine");
-		numbers.Add ("ten");
-		numbers.Add ("eleven");
-		display ();
+		sortNumbers ();
+		if (dataController.DC.twoPlayer) {
+			top.transform.Rotate (Vector3.forward * 180);
+		}
+
 	}
 
 	void display(){
+
 		top.text = numbers [topScore];
 		bottom.text = numbers [bottomScore];
 	}
@@ -44,6 +37,22 @@ public class scoring : MonoBehaviour {
 		if(topScore == 11 || bottomScore == 11){
 			SceneManager.LoadScene(2);
 		}
+		display ();
+	}
+
+	void sortNumbers(){
+		numbers.Add ("zero");
+		numbers.Add ("one");
+		numbers.Add ("two");
+		numbers.Add ("three");
+		numbers.Add ("four");
+		numbers.Add ("five");
+		numbers.Add ("six");
+		numbers.Add ("seven");
+		numbers.Add ("eight");
+		numbers.Add ("nine");
+		numbers.Add ("ten");
+		numbers.Add ("eleven");
 		display ();
 	}
 }

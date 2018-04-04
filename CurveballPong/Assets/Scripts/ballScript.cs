@@ -18,8 +18,13 @@ public class ballScript : MonoBehaviour {
 	float ballRad = 1;
 	public GameObject events;
 	public bool smashOn;
-	public Text smashText;
+	public Button topSmash;
+	public Button bottomSmash;
 	public float smashSensitivity;
+	public GameObject topPaddle;
+	public GameObject bottomPaddle;
+	public bool touchingTop;
+	public bool touchingBottom;
 
 
 	// Use this for initialization
@@ -30,6 +35,8 @@ public class ballScript : MonoBehaviour {
 		spinDecay = 1.01f;
 		rb2d = GetComponent<Rigidbody2D> ();
 		smashOn = true;
+		touchingTop = false;
+		touchingBottom = false;
 		
 	}
 
@@ -39,10 +46,10 @@ public class ballScript : MonoBehaviour {
 		smashCheck ();
 		if (transform.localPosition.y < -300) {
 			reset ();
-			events.GetComponent<scoring> ().score (true);
+			events.GetComponent<PlayAreaScript> ().score (true);
 		} else if (transform.localPosition.y > 300) {
 			reset ();
-			events.GetComponent<scoring> ().score (false);
+			events.GetComponent<PlayAreaScript> ().score (false);
 
 		}
 		angle -= spin * spinMultiplier;
@@ -65,49 +72,90 @@ public class ballScript : MonoBehaviour {
 		if (c.gameObject.tag == "wall") {
 			angle = 180f - angle;
 		}
+
 		if (c.gameObject.tag == "top") {
-			angle -= (c.gameObject.transform.localPosition.x - transform.localPosition.x) * paddleCurve;
-			angle = -angle;
-			spin += c.GetComponent<Rigidbody2D> ().velocity.x;
-
-
+			touchingTop = true;
 		}
 		if (c.gameObject.tag == "bottom") {
-			if (c.gameObject.transform.localPosition.y < transform.localPosition.y - ballRad) {
-				angle += (c.gameObject.transform.localPosition.x - transform.localPosition.x) * paddleCurve;
-				angle = -angle;
-				spin -= c.GetComponent<Rigidbody2D> ().velocity.x;
-			}
+			touchingBottom = true;
+		}
+		if (c.gameObject.tag == "topCol" && touchingTop) {
+			angle -= (topPaddle.transform.localPosition.x - transform.localPosition.x) * paddleCurve;
+			angle = -angle;
+			spin += topPaddle.GetComponent<Rigidbody2D> ().velocity.x;
+			Debug.Log ("This");
+
 
 		}
-		if (c.gameObject.tag == "topCol") {
-			reset ();
+		if (c.gameObject.tag == "bottomCol" && touchingBottom) { //Ooh Err! 
+
+			angle += (bottomPaddle.transform.localPosition.x - transform.localPosition.x) * paddleCurve;
+			angle = -angle;
+			spin -= bottomPaddle.GetComponent<Rigidbody2D> ().velocity.x;
+		
+
 		}
+
 	}
+
+	void OnTriggerExit2D(Collider2D c){
+
+		if (c.gameObject.tag == "top") {
+			touchingTop = false;
+		}
+		if (c.gameObject.tag == "bottom") {
+			touchingBottom = false;
+		}
+
+	}
+
 	public Vector2 Vector2FromAngle(float a)
 	{
 		a *= Mathf.Deg2Rad;
 		return new Vector2(Mathf.Cos(a), Mathf.Sin(a));
 	}
 
-	public void smash(){
-		if (smashOn) {
+	public void smash(bool top){
+		if (!top) {
 			angle = Random.Range (60, 120);
-			spin = 0f;
+		} else if (top) {
+			angle = Random.Range (240, 300);
 		}
+		spin = 0f;
+		currentSpeed += speedIncrease * 2f;
 	}
 
 	void smashCheck(){
-		if ((angle % 360f > -smashSensitivity && angle % 360f < smashSensitivity) || (angle % 360f > 180f - smashSensitivity && angle % 360f < 180f + smashSensitivity)) {
-			if (!smashOn) {
-				smashText.color = Color.white;
-				smashOn = true;
+		bottomSmash.gameObject.SetActive (false);
+		bottomSmash.interactable = false;
+		topSmash.gameObject.SetActive (false);
+		topSmash.interactable = false;
+
+		if(angleCheck()){
+			
+			if (transform.localPosition.y > 0f) {
+				topSmash.gameObject.SetActive (true);
+				topSmash.interactable = true;
+			} else {
+				bottomSmash.gameObject.SetActive (true);
+				bottomSmash.interactable = true;
 			}
+		}
+	}
+
+	bool angleCheck(){
+		while (angle < 0f) {
+			angle += 360f;
+		}
+
+		if (angle % 360f < smashSensitivity) {
+			return true;
+		} else if ((angle % 360f) > 360f - smashSensitivity) {
+			return true;
+		} else if (angle % 360f > 180f - smashSensitivity && angle % 360f < 180f + smashSensitivity) {
+			return true;
 		} else {
-			if (smashOn) {
-				smashText.color = Color.black;
-				smashOn = false;
-			}
+			return false;
 		}
 	}
 
