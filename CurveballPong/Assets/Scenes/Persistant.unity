@@ -141,6 +141,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   twoPlayer: 0
+  paddleAccel: 0.2
+  paddleTopEnd: 0.02
+  paddleSlow: 1.12
+  paddleSpeedMultiplier: 550
+  spinMultiplier: 1.2
+  rotationMultiplier: 20
+  spinDecay: 1.01
 --- !u!4 &651168210
 Transform:
   m_ObjectHideFlags: 0

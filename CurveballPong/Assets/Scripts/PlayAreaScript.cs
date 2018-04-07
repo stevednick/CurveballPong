@@ -24,8 +24,10 @@ public class PlayAreaScript : MonoBehaviour {
 
 	void display(){
 
-		top.text = numbers [topScore];
-		bottom.text = numbers [bottomScore];
+		//top.text = numbers [topScore];
+		//bottom.text = numbers [bottomScore];
+		top.text = "" + topScore;
+		bottom.text = "" + bottomScore;
 	}
 
 	public void score(bool top){

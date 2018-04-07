@@ -8,6 +8,13 @@ public class dataController : MonoBehaviour {
 
 	public static dataController DC;
 	public bool twoPlayer;
+	public float paddleAccel;
+	public float paddleTopEnd;
+	public float paddleSlow;
+	public float paddleSpeedMultiplier;
+	public float spinMultiplier;
+	public float rotationMultiplier;
+	public float spinDecay;
 
 
 
